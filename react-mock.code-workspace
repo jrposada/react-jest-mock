@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "node_modules": true
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "launch": {
+    "configurations": [
+      {
+        "name": "Launch Brave",
+        "request": "launch",
+        "type": "pwa-chrome",
+        "runtimeExecutable": "C:/Users/Javier/AppData/Local/BraveSoftware/Brave-Browser/Application/brave.exe",
+        "runtimeArgs": ["--remote-debugging-port=9222"],
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder}"
+      }
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "editorconfig.editorconfig",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

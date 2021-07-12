@@ -1,0 +1,25 @@
+{
+  "name": "react-mock",
+  "version": "0.0.1",
+  "description": "Mock react componenents wiht a simple method.",
+  "license": "MIT",
+  "scripts": {
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  },
+  "author": "Javier Rodriguez Posada",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "mock",
+    "unit",
+    "test",
+    "testing"
+  ],
+  "devDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "@testing-library/react": "12.0.0",
+    "react-scripts": "4.0.3"
+  }
+}
