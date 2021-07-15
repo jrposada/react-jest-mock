@@ -4,7 +4,7 @@
   "description": "Mock react componenents wiht a simple method.",
   "license": "MIT",
   "scripts": {
-    "build": "gulp build",
+    "ci": "gulp build",
     "test": "jest --env=jsdom"
   },
   "author": "Javier Rodriguez Posada",
