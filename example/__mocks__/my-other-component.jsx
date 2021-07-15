@@ -1,4 +1,4 @@
-import createComponentMock from 'create-component-mock'
+import createComponentMock from '../../lib/create-component-mock'
 
 const MyOtherComponent = createComponentMock()
 

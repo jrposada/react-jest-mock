@@ -1,3 +1,5 @@
+import React from 'react'
+
 import MyOtherComponent from './my-other-component'
 
 function MyComponent() {

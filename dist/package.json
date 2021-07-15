@@ -1,7 +1,7 @@
 {
   "name": "react-mock",
   "version": "0.0.1",
-  "description": "Mock react componenents wiht a simple method.",
+  "description": "Mock react componenents with a simple method.",
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
