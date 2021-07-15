@@ -8,7 +8,7 @@
     "url": "https://github.com/jrposada/react-jest-mock.git"
   },
   "scripts": {
-    "ci": "gulp build",
+    "build": "gulp build",
     "test": "jest --env=jsdom"
   },
   "author": "Javier Rodriguez Posada",
