@@ -18,4 +18,8 @@ function buildLib() {
     .pipe(dest(config.output.lib))
 }
 
-exports.build = series(cleanBuild, copyPackage, buildLib)
+function buildTypes() {
+  return src(config.src.types).pipe(dest(config.output.lib))
+}
+
+exports.build = series(cleanBuild, copyPackage, buildLib, buildTypes)
