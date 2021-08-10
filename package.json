@@ -7,12 +7,12 @@
     "type": "git",
     "url": "https://github.com/jrposada/react-jest-mock.git"
   },
+  "author": "Javier Rodriguez Posada",
+  "main": "index.js",
   "scripts": {
     "build": "gulp build",
     "test": "jest --env=jsdom"
   },
-  "author": "Javier Rodriguez Posada",
-  "main": "index.js",
   "keywords": [
     "react",
     "mock",

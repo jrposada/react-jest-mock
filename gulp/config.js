@@ -5,6 +5,6 @@ module.exports = {
   },
   src: {
     package: ['./index.js', './package.json'],
-    lib: ['./lib/**/*'],
+    lib: ['./lib/**/*', '!./lib/**/*.d.ts'],
   },
 }
