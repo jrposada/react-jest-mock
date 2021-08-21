@@ -1,26 +1,46 @@
 import React from 'react'
 
-function createComponentMock() {
-  const mock = {}
+function createComponentMock(extraNodes) {
+  let mock = {}
 
   function ComponentMock({ children, ...restProps }) {
     let dataTestid = restProps['data-testid'] ?? '-'
 
-    const currentMock = {
+    mock[dataTestid] = mock[dataTestid] ?? {
       render: jest.fn(),
-      props: restProps,
+      childrenArgs: [],
     }
+    mock[dataTestid].props = restProps
 
-    currentMock.render(restProps, children)
+    mock[dataTestid].render(restProps)
 
-    mock[dataTestid] = currentMock
-    return <div dasta-testid={dataTestid}>{children}</div>
+    if (typeof children === 'function') {
+      children = children(...mock[dataTestid].childrenArgs)
+    }
+    return (
+      <>
+        <div data-testid={dataTestid}>{children}</div>
+        {extraNodes?.map(({ name, args }) => (
+          <div key={name}>
+            {typeof restProps[name] === 'funciton'
+              ? restProps[name](args)
+              : restProps[name]}
+          </div>
+        ))}
+      </>
+    )
   }
 
   ComponentMock.mock = mock
   ComponentMock.resetMock = () => {
     mock = {}
     ComponentMock.mock = mock
+  }
+  ComponentMock.setupMock = (dataTestid, childrenArgs) => {
+    ComponentMock.mock[dataTestid] = {
+      render: jest.fn(),
+      childrenArgs,
+    }
   }
 
   return ComponentMock

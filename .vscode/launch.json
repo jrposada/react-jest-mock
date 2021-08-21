@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "name": "Debug Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["${workspaceRoot}/node_modules/.bin/jest"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229,
+      "args": ["--runInBand", "--env=jsdom", "--watch"]
+    }
+  ]
+}

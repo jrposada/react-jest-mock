@@ -1,5 +1,6 @@
 import React from 'react'
 
+import MyOtherComplexComponent from './my-other-complex-component'
 import MyOtherComponent from './my-other-component'
 
 function MyComponent() {
@@ -26,6 +27,17 @@ function MyComponent() {
       >
         Nice!
       </MyOtherComponent>
+      <MyOtherComplexComponent
+        data-testid="my-other-complex-component"
+        header={
+          <MyOtherComponent data-testid="paco-header">Head</MyOtherComponent>
+        }
+        footer={
+          <MyOtherComponent data-testid="paco-footer">Foot</MyOtherComponent>
+        }
+      >
+        {(message) => <>{`Paco pizza says: ${message}`}</>}
+      </MyOtherComplexComponent>
     </>
   )
 }
