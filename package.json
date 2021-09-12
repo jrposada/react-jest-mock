@@ -1,6 +1,6 @@
 {
   "name": "react-jest-mock",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mock react componenents wiht a simple method.",
   "license": "MIT",
   "repository": {
@@ -12,7 +12,8 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "gulp build",
-    "test": "jest --env=jsdom"
+    "test": "jest --env=jsdom",
+    "publish": "npm run build && npm publish ./dist/"
   },
   "keywords": [
     "react",
