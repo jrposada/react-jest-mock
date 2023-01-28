@@ -35,7 +35,7 @@ describe('...', () => {
 ```
 
 # Configuration
-By default ````mockComponent()``` will just render a div element. This behavior and more can be change by passing an optional parameter to the function.
+By default `mockComponent()` will just render a div element. This behavior and more can be change by passing an optional parameter to the function.
 ``` ts
 const settings = {
     as: 'input', // Controls what element will be render on the dom. Supported values are: input, button, label and div.
@@ -46,7 +46,7 @@ const MyDependency = mockComponent(settings)
 ```
 
 # Firing events
-All props passed to the mock component are accessible through the "propsRef" object and can be directly called inside and "act".
+All props passed to the mock component are accessible through the `propsRef` object and can be directly called inside and `act()`.
 ``` ts
 act(() => {
     MyDependencyMock.current.someCallback(...args)
