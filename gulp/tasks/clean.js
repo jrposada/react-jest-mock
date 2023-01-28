@@ -1,8 +1,8 @@
+const { parallel } = require('gulp')
 const del = require('del')
 
-const config = require('../config')
-
 function cleanBuild() {
-  return del([config.output.package])
+  return del('./dist')
 }
-exports.cleanBuild = cleanBuild
+
+exports.clean = parallel(cleanBuild)

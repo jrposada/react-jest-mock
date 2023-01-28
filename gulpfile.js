@@ -1,5 +1,4 @@
-'use strict'
-
-const { build } = require('./gulp/tasks/build')
+const { build, clean } = require('./gulp')
 
 exports.build = build
+exports.clean = clean

@@ -1,25 +1,35 @@
-'use strict'
+const { dest, series, src } = require('gulp')
+const through = require('through2')
+var jsonFormat = require('gulp-json-format')
 
-const { series, src, dest } = require('gulp')
-const babel = require('gulp-babel')
+function generatePackageJson() {
+  return src('./package.json')
+    .pipe(
+      through.obj((file, enc, cb) => {
+        const json = JSON.parse(file.contents.toString())
 
-const { cleanBuild } = require('./clean')
+        delete json.private
+        delete json.scripts
+        delete json.browserslist
+        delete json.devDependencies
+        delete json.overrides
+        delete json.jest
 
-const config = require('../config')
-const babelConfig = require('../../babel.config.json')
+        json.sideEffects = false
+        json.main = 'lib/index.js'
+        json.types = 'lib/index.d.ts'
 
-function copyPackage() {
-  return src(config.src.package).pipe(dest(config.output.package))
+        file.contents = Buffer.from(JSON.stringify(json))
+
+        cb(null, file)
+      })
+    )
+    .pipe(jsonFormat(4))
+    .pipe(dest('./build'))
 }
 
-function buildLib() {
-  return src(config.src.lib)
-    .pipe(babel(babelConfig))
-    .pipe(dest(config.output.lib))
+function copyReadme() {
+  return src('./README.md').pipe(dest('./build'))
 }
 
-function buildTypes() {
-  return src(config.src.types).pipe(dest(config.output.lib))
-}
-
-exports.build = series(cleanBuild, copyPackage, buildLib, buildTypes)
+exports.build = series(generatePackageJson, copyReadme)
