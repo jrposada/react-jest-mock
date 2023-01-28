@@ -32,7 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
       - run: npm publish ./build
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
