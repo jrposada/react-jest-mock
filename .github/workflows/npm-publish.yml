@@ -11,7 +11,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  publish-npm:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,20 +22,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      - uses: actions/cache@v3
-        with:
-          path: ~/build
-          key: ${{ runner.os }}-build
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: ~/build
-          key: ${{ runner.os }}-build
       - run: npm publish ./build
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
