@@ -28,8 +28,9 @@ jobs:
       - run: npm run build
 
       - name: Configure .npmrc
-        run: echo //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} >> ~/.npmrc
-        run: cat ~/.npmrc
+        run: |
+          echo //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} >> ~/.npmrc
+          cat ~/.npmrc
 
       - run: npm publish ./build
         env:
