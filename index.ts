@@ -1,3 +1,7 @@
-import createComponentMock from './lib/mock-component'
+import mockComponent, {
+  ComponentMock,
+  MockFunction,
+} from './lib/mock-component'
 
-export { createComponentMock }
+export { mockComponent }
+export type { ComponentMock, MockFunction }
