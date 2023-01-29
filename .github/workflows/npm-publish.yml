@@ -24,6 +24,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build
+      - run: curl -H 'Authorization: Bearer 29bfaaaa-46c5-aaee-ba6f-92bedeadbeef' https://registry.npmjs.org/
       - run: npm publish ./build
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
