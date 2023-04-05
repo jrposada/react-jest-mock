@@ -1,13 +1,15 @@
 import { act } from '@testing-library/react'
+import { ComponentType } from 'react'
 import { ComponentMock } from './mock-component'
 import { get, Path } from './path'
 
 async function fireCallback<TProps = any>(
-    componentMock: ComponentMock<TProps>,
+    component: ComponentType<TProps>,
     eventName: Path<TProps>,
     args: any[] = [],
     nthCall: number = 1
 ) {
+    const componentMock = component as ComponentMock<TProps>
     const props = componentMock._fn.mock.calls[nthCall - 1]?.[0]
 
     if (!props) {
