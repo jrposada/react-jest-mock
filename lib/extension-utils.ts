@@ -3,7 +3,14 @@ import { isEqual } from 'lodash'
 const tab = '    '
 
 function printValue(value: any) {
-    return typeof value === 'string' ? `"${value}"` : value
+    return typeof value === 'string'
+        ? `"${value}"`
+        : typeof value === 'object' &&
+          value['$$typeof'] === Symbol.for('react.element')
+        ? 'React.Element'
+        : typeof value === 'function'
+        ? 'System.Function()'
+        : value
 }
 
 function printProps(props: any, index = 1) {
@@ -15,7 +22,11 @@ function printProps(props: any, index = 1) {
             padding += tab
         }
 
-        if (typeof value === 'object') {
+        if (
+            typeof value === 'object' &&
+            value &&
+            value['$$typeof'] !== Symbol.for('react.element')
+        ) {
             message += `${padding}${key}: {\n${printProps(
                 value,
                 index + 1
@@ -46,7 +57,11 @@ function printDiffProps(
         let colorStart = ''
         let colorEnd = ''
 
-        if (typeof value === 'object') {
+        if (
+            typeof value === 'object' &&
+            value &&
+            value['$$typeof'] !== Symbol.for('react.element')
+        ) {
             if (!diff && !actual?.[key]) {
                 colorStart = `\x1b[${color}`
                 colorEnd = '\x1b[0m'
