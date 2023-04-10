@@ -6,6 +6,7 @@ import {
 } from './lib/matchers/matchers'
 import mockComponent, { ComponentMock } from './lib/component/mock-component'
 import fireCallback from './lib/utils/fire-callback'
+import componentReset from './lib/utils/component-reset'
 
 declare global {
     namespace jest {
@@ -28,5 +29,5 @@ expect.extend({
     toHaveBeenNthRenderedWith,
 })
 
-export { mockComponent, fireCallback }
+export { mockComponent, fireCallback, componentReset }
 export type { ComponentMock }
