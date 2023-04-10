@@ -1,6 +1,6 @@
 {
     "name": "react-jest-mock",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "Mock react components with a simple method.",
     "license": "MIT",
     "repository": {
