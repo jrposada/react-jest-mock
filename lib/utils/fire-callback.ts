@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react'
 import { ComponentType } from 'react'
-import { ComponentMock } from './mock-component'
+import { ComponentMock } from '../component/mock-component'
 import { get } from './path'
 
 async function fireCallback<TProps = any>(

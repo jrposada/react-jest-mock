@@ -1,11 +1,11 @@
 import { isEqual, isMatch } from 'lodash'
-import { ComponentMock } from './mock-component'
+import { ComponentMock } from '../component/mock-component'
 import {
     checkIsComponentMock,
     formatText,
     printDiffProps,
     printProps,
-} from './extension-utils'
+} from './matchers-utils'
 
 function toHaveBeenRendered(mock: ComponentMock<any, any>) {
     checkIsComponentMock(mock)

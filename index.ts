@@ -3,9 +3,9 @@ import {
     toHaveBeenRenderedTimes,
     toHaveBeenRenderedWith,
     toHaveBeenNthRenderedWith,
-} from './lib/extensions'
-import mockComponent, { ComponentMock } from './lib/mock-component'
-import fireCallback from './lib/fire-callback'
+} from './lib/matchers/matchers'
+import mockComponent, { ComponentMock } from './lib/component/mock-component'
+import fireCallback from './lib/utils/fire-callback'
 
 declare global {
     namespace jest {
