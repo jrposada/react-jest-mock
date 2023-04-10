@@ -109,4 +109,4 @@ function printDiffProps(
     return message
 }
 
-export { printProps, printDiffProps, checkIsComponentMock }
+export { printProps, printDiffProps, checkIsComponentMock, formatText }

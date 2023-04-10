@@ -2,6 +2,7 @@ import { isEqual } from 'lodash'
 import { ComponentMock } from './mock-component'
 import {
     checkIsComponentMock,
+    formatText,
     printDiffProps,
     printProps,
 } from './extension-utils'
@@ -94,7 +95,7 @@ function toHaveBeenRenderedWith(
             expectedProps,
             actualRenderCallsProps[0],
             '32m'
-        )}\n, but it was called with\n\n${printDiffProps(
+        )}\n, but it was rendered with\n\n${printDiffProps(
             actualRenderCallsProps[0],
             expectedProps,
             '31m'
@@ -114,7 +115,8 @@ function toHaveBeenNthRenderedWith(
 ) {
     checkIsComponentMock(mock)
 
-    const renderCallProps = mock._fn.mock.calls[nthCall - 1]?.[0]
+    const renderCalls = mock._fn.mock.calls
+    const renderCallProps = renderCalls[nthCall - 1]?.[0]
 
     const pass =
         !!renderCallProps &&
@@ -134,17 +136,35 @@ function toHaveBeenNthRenderedWith(
                 )}\n, but it was.`,
         }
     } else {
-        const message = `Expected ${
-            mock.displayName
-        } to have been rendered with props\n\n${printDiffProps(
-            expectedProps,
-            renderCallProps,
-            '32m'
-        )}\n, but it was called with\n\n${printDiffProps(
-            renderCallProps,
-            expectedProps,
-            '31m'
-        )}`
+        let message = ''
+
+        if (!renderCallProps) {
+            message = `Expected ${mock.displayName} to have been ${formatText(
+                `${nthCall}nth`,
+                true,
+                '32m'
+            )} rendered with props\n\n${printDiffProps(
+                expectedProps,
+                renderCallProps,
+                '90m'
+            )}\n, but it was rendered ${formatText(
+                `${renderCalls.length}`,
+                true,
+                '31m'
+            )} times`
+        } else {
+            message = `Expected ${
+                mock.displayName
+            } to have been ${nthCall} rendered with props\n\n${printDiffProps(
+                expectedProps,
+                renderCallProps,
+                '32m'
+            )}\n, but it was rendered with\n\n${printDiffProps(
+                renderCallProps,
+                expectedProps,
+                '31m'
+            )}`
+        }
 
         return {
             pass: false,
