@@ -71,7 +71,12 @@ function printDiffProps(
         return message
     }
 
-    Object.entries(expected).forEach(([key, value]) => {
+    const obj =
+        expected['$$typeof'] === Symbol.for('jest.asymmetricMatcher')
+            ? expected['sample']
+            : expected
+
+    Object.entries(obj).forEach(([key, value]) => {
         let padding = ''
         for (let i = 0; i < index; i++) {
             padding += tab
@@ -83,25 +88,27 @@ function printDiffProps(
             value['$$typeof'] !== Symbol.for('react.element')
         ) {
             const paint = diff || !actual?.[key]
+            const finalColor = !actual?.[key] ? '90m' : color
 
             message += `${formatText(
                 `${padding}${key}: {`,
                 paint,
-                color
+                finalColor
             )}\n${printDiffProps(
                 value,
                 actual?.[key],
                 color,
                 index + 1,
                 paint
-            )}${formatText(`${padding}}`, paint, color)}\n`
+            )}${formatText(`${padding}}`, paint, finalColor)}\n`
         } else {
             const paint = diff || !isEqual(value, actual?.[key])
+            const finalColor = !actual?.[key] ? '90m' : color
 
             message += `${formatText(
                 `${padding}${key}: ${printValue(value)},`,
                 paint,
-                color
+                finalColor
             )} \n`
         }
     })

@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash'
+import { isEqual, isMatch } from 'lodash'
 import { ComponentMock } from './mock-component'
 import {
     checkIsComponentMock,
@@ -49,28 +49,25 @@ function toHaveBeenRenderedTimes(mock: ComponentMock<any, any>, calls: number) {
     }
 }
 
-function toHaveBeenRenderedWith(
-    mock: ComponentMock<any, any>,
-    expectedProps: any
-) {
+function toHaveBeenRenderedWith(mock: ComponentMock<any, any>, expected: any) {
     checkIsComponentMock(mock)
 
     const renderCallsProps = mock._fn.mock.calls
         .filter((call) => !!call[0])
         .map((call) => call[0])
 
+    const usePartialMatch =
+        expected.$$typeof === Symbol.for('jest.asymmetricMatcher')
+    const expectedProps = usePartialMatch ? expected.sample : expected
+
     const matchedRenderCallsProps = renderCallsProps.filter((props) =>
-        Object.keys(expectedProps).every((propName) =>
-            isEqual(props[propName], expectedProps[propName])
-        )
+        usePartialMatch
+            ? isMatch(props, expectedProps)
+            : isEqual(props, expectedProps) &&
+              Object.keys(props).length === Object.keys(expectedProps).length
     )
 
-    const pass =
-        matchedRenderCallsProps.length > 0 &&
-        matchedRenderCallsProps.some(
-            (props) =>
-                Object.keys(props).length === Object.keys(expectedProps).length
-        )
+    const pass = matchedRenderCallsProps.length > 0
 
     if (pass) {
         return {
@@ -111,19 +108,22 @@ function toHaveBeenRenderedWith(
 function toHaveBeenNthRenderedWith(
     mock: ComponentMock<any, any>,
     nthCall: number,
-    expectedProps: any
+    expected: any
 ) {
     checkIsComponentMock(mock)
 
     const renderCalls = mock._fn.mock.calls
     const renderCallProps = renderCalls[nthCall - 1]?.[0]
 
+    const usePartialMatch =
+        expected.$$typeof === Symbol.for('jest.asymmetricMatcher')
+    const expectedProps = usePartialMatch ? expected.sample : expected
+
     const pass =
         !!renderCallProps &&
-        !Object.keys(expectedProps).some(
-            (propName) =>
-                !isEqual(renderCallProps[propName], expectedProps[propName])
-        )
+        (usePartialMatch
+            ? isMatch(renderCallProps, expectedProps)
+            : isEqual(renderCallProps, expectedProps))
 
     if (pass) {
         return {
