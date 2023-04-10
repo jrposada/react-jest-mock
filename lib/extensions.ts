@@ -1,8 +1,14 @@
 import { isEqual } from 'lodash'
 import { ComponentMock } from './mock-component'
-import { printDiffProps, printProps } from './extension-utils'
+import {
+    checkIsComponentMock,
+    printDiffProps,
+    printProps,
+} from './extension-utils'
 
 function toHaveBeenRendered(mock: ComponentMock<any, any>) {
+    checkIsComponentMock(mock)
+
     const fn = mock._fn
     const mockCalls = fn.mock.calls
 
@@ -22,6 +28,8 @@ function toHaveBeenRendered(mock: ComponentMock<any, any>) {
 }
 
 function toHaveBeenRenderedTimes(mock: ComponentMock<any, any>, calls: number) {
+    checkIsComponentMock(mock)
+
     const fn = mock._fn
     const mockCalls = fn.mock.calls
 
@@ -40,20 +48,28 @@ function toHaveBeenRenderedTimes(mock: ComponentMock<any, any>, calls: number) {
     }
 }
 
-function toHaveBeenRenderedWith(mock: any, expectedProps: any) {
-    if (typeof mock._fn !== 'function') {
-        throw new Error(`Expected a mock component`)
-    }
+function toHaveBeenRenderedWith(
+    mock: ComponentMock<any, any>,
+    expectedProps: any
+) {
+    checkIsComponentMock(mock)
 
-    const renderCalls = mock._fn.mock.calls.filter((call) => !!call[0])
+    const renderCallsProps = mock._fn.mock.calls
+        .filter((call) => !!call[0])
+        .map((call) => call[0])
 
-    const matchedRenderCalls = renderCalls.filter((call) =>
+    const matchedRenderCallsProps = renderCallsProps.filter((props) =>
         Object.keys(expectedProps).every((propName) =>
-            isEqual(call[0][propName], expectedProps[propName])
+            isEqual(props[propName], expectedProps[propName])
         )
     )
 
-    const pass = matchedRenderCalls.length > 0
+    const pass =
+        matchedRenderCallsProps.length > 0 &&
+        matchedRenderCallsProps.some(
+            (props) =>
+                Object.keys(props).length === Object.keys(expectedProps).length
+        )
 
     if (pass) {
         return {
@@ -66,23 +82,20 @@ function toHaveBeenRenderedWith(mock: any, expectedProps: any) {
                 )}\n, but it was.`,
         }
     } else {
-        const actualRenderCalls = renderCalls.filter((call) =>
+        const actualRenderCallsProps = renderCallsProps.filter((props) =>
             Object.keys(expectedProps).some(
-                (propName) =>
-                    !isEqual(call[0][propName], expectedProps[propName])
+                (propName) => !isEqual(props[propName], expectedProps[propName])
             )
         )
-
-        const actualProps = actualRenderCalls.map((call) => call[0])
 
         const message = `Expected ${
             mock.displayName
         } to have been rendered with props\n\n${printDiffProps(
             expectedProps,
-            actualProps[0],
+            actualRenderCallsProps[0],
             '32m'
         )}\n, but it was called with\n\n${printDiffProps(
-            actualProps[0],
+            actualRenderCallsProps[0],
             expectedProps,
             '31m'
         )}`
@@ -99,15 +112,16 @@ function toHaveBeenNthRenderedWith(
     nthCall: number,
     expectedProps: any
 ) {
-    if (typeof mock._fn !== 'function') {
-        throw new Error(`Expected a mock component`)
-    }
+    checkIsComponentMock(mock)
 
-    const renderCall = mock._fn.mock.calls[nthCall - 1]
+    const renderCallProps = mock._fn.mock.calls[nthCall - 1]?.[0]
 
-    const pass = !Object.keys(expectedProps).some(
-        (propName) => !isEqual(renderCall[0][propName], expectedProps[propName])
-    )
+    const pass =
+        !!renderCallProps &&
+        !Object.keys(expectedProps).some(
+            (propName) =>
+                !isEqual(renderCallProps[propName], expectedProps[propName])
+        )
 
     if (pass) {
         return {
@@ -120,16 +134,14 @@ function toHaveBeenNthRenderedWith(
                 )}\n, but it was.`,
         }
     } else {
-        const actualProps = renderCall[0]
-
         const message = `Expected ${
             mock.displayName
         } to have been rendered with props\n\n${printDiffProps(
             expectedProps,
-            actualProps,
+            renderCallProps,
             '32m'
         )}\n, but it was called with\n\n${printDiffProps(
-            actualProps,
+            renderCallProps,
             expectedProps,
             '31m'
         )}`

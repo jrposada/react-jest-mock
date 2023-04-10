@@ -1,6 +1,20 @@
 import { isEqual } from 'lodash'
 
+function checkIsComponentMock(mock: any) {
+    if (!(typeof mock._fn === 'function' && mock._fn._isMockFunction)) {
+        throw new Error(`Expected a mock component`)
+    }
+}
+
 const tab = '    '
+
+function formatText(text: string, paint: boolean, color: string) {
+    if (paint) {
+        return `\x1b[${color}${text}\x1b[0m`
+    }
+
+    return text
+}
 
 function printValue(value: any) {
     return typeof value === 'string'
@@ -9,7 +23,7 @@ function printValue(value: any) {
           value['$$typeof'] === Symbol.for('react.element')
         ? 'React.Element'
         : typeof value === 'function'
-        ? 'System.Function()'
+        ? 'Function'
         : value
 }
 
@@ -48,45 +62,51 @@ function printDiffProps(
 ) {
     let message = ''
 
+    if (expected === undefined) {
+        message += `${formatText(
+            `${tab}undefined`,
+            actual !== undefined,
+            color
+        )}`
+        return message
+    }
+
     Object.entries(expected).forEach(([key, value]) => {
         let padding = ''
         for (let i = 0; i < index; i++) {
             padding += tab
         }
 
-        let colorStart = ''
-        let colorEnd = ''
-
         if (
             typeof value === 'object' &&
             value &&
             value['$$typeof'] !== Symbol.for('react.element')
         ) {
-            if (!diff && !actual?.[key]) {
-                colorStart = `\x1b[${color}`
-                colorEnd = '\x1b[0m'
-            }
+            const paint = diff || !actual?.[key]
 
-            message += `${colorStart}${padding}${key}: {${colorEnd}\n${printDiffProps(
+            message += `${formatText(
+                `${padding}${key}: {`,
+                paint,
+                color
+            )}\n${printDiffProps(
                 value,
                 actual?.[key],
                 color,
                 index + 1,
-                !!colorStart
-            )}${padding}${colorStart}}${colorEnd}\n`
+                paint
+            )}${formatText(`${padding}}`, paint, color)}\n`
         } else {
-            if (diff || !isEqual(value, actual?.[key])) {
-                colorStart = `\x1b[${color}`
-                colorEnd = '\x1b[0m'
-            }
+            const paint = diff || !isEqual(value, actual?.[key])
 
-            message += `${colorStart}${padding}${key}: ${printValue(
-                value
-            )}, ${colorEnd}\n`
+            message += `${formatText(
+                `${padding}${key}: ${printValue(value)},`,
+                paint,
+                color
+            )} \n`
         }
     })
 
     return message
 }
 
-export { printProps, printDiffProps }
+export { printProps, printDiffProps, checkIsComponentMock }
