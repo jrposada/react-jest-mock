@@ -31,8 +31,8 @@ async function fireCallback<TProps = any>(
         return
     }
 
-    await act(async () => {
-        await callback(...args)
+    return await act(async () => {
+        return await callback(...args)
     })
 }
 
