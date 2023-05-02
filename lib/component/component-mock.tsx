@@ -39,7 +39,7 @@ function ComponentMock<TProps extends Record<string, any>, TRef>(
 
     return (
         <ComponentMockChildren<TProps>
-            ref={ref as ForwardedRef<Refs>}
+            ref={!refMock ? (ref as ForwardedRef<Refs>) : undefined}
             as={as}
             props={props}
             renderProps={renderProps}

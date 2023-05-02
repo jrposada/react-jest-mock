@@ -16,17 +16,30 @@ export default MyDependency;
 import { render } from '@testing-library/react';
 
 import MyDependency from './my-dependency';
+import MyOtherDependency from './my-other-dependency';
 
 import MyComponent from './my-component';
 
 // Manually invoke jest.mock if needed.
 jest.mock('./my-dependency');
 
+// The mock can also be created inline through jest.requireActual
+jest.mock('/my-other-dependency', () => {
+    const mockComponent = jest.requireActual("react-jest-mock").mockComponent;
+    return mockComponent({ name: "MyOtherDependency" });
+})
+
 describe('...', () => {
     it('...', () => {
         render(<MyComponent />);
 
         expect(MyDependency).toHaveBeenRendered();
+    })
+
+    it('...', () => {
+        render(<MyComponent />);
+
+        expect(MyOtherDependency).toHaveBeenRendered();
     })
 });
 ```
@@ -45,9 +58,81 @@ const MyDependency = mockComponent(settings);
 
 # Custom matchers
 1. toHaveBeenRendered
+``` ts
+import { render } from '@testing-library/react';
+
+import MyDependency from './my-dependency';
+
+import MyComponent from './my-component';
+
+// Manually invoke jest.mock if needed.
+jest.mock('./my-dependency');
+
+describe('...', () => {
+    it('...', () => {
+        render(<MyComponent />);
+
+        expect(MyDependency).toHaveBeenRendered();
+    })
+});
+```
 2. toHaveBeenRenderedTimes
+``` ts
+import { render } from '@testing-library/react';
+
+import MyDependency from './my-dependency';
+
+import MyComponent from './my-component';
+
+// Manually invoke jest.mock if needed.
+jest.mock('./my-dependency');
+
+describe('...', () => {
+    it('...', () => {
+        render(<MyComponent />);
+
+        expect(MyDependency).toHaveBeenRenderedTimes(1);
+    })
+});
+```
 3. toHaveBeenRenderedWith
+``` ts
+import { render } from '@testing-library/react';
+
+import MyDependency from './my-dependency';
+
+import MyComponent from './my-component';
+
+// Manually invoke jest.mock if needed.
+jest.mock('./my-dependency');
+
+describe('...', () => {
+    it('...', () => {
+        render(<MyComponent />);
+
+        expect(MyDependency).toHaveBeenRenderedWith({name: 'test'});
+    })
+});
+```
 4. toHaveBeenNthRenderedWith
+``` ts
+import { render } from '@testing-library/react';
+
+import MyDependency from './my-dependency';
+
+import MyComponent from './my-component';
+
+// Manually invoke jest.mock if needed.
+jest.mock('./my-dependency');
+
+describe('...', () => {
+    it('...', () => {
+        render(<MyComponent />);
+
+        expect(MyDependency).toHaveBeenNthRenderedWith(1, {name: 'test'});
+    })
+});
+```
 
 # Firing events
 Components callbacks can be invoke through "fireCallback" utility function. Note that this utility is prepared to handle async callbacks too so it should be awaited.
